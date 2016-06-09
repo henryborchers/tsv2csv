@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='tsv2csv',
-    version='0.0.3',
+    version='0.0.4',
     packages=['tsv2csv'],
     url='',
     license='',
