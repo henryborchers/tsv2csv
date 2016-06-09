@@ -1,41 +1,18 @@
 #!/usr/bin/env python3
 import argparse
-import csv
 import os
-
 import sys
+from tsv2csv import tsv2csv
 
-def tsv2csv(source, destination):
-    records = []
-    print("Reading rows")
-    with open(source, 'r', encoding="utf8") as f:
-        reader = csv.DictReader(f, dialect=csv.excel_tab)
-        for row in reader:
-            records.append(row)
-    print("Read {} rows from {}".format(len(records), os.path.basename(source)))
+def ask_overwrite(statement):
 
-    print("Writing rows")
-    with open(destination, "w", encoding="utf8") as f:
-        records_written = 0
-        fieldnames = list(records[0].keys())
-        writer = csv.DictWriter(f, fieldnames=fieldnames)
-        writer.writeheader()
-        for record in records:
-            writer.writerow(record)
-            records_written += 1
-        print("Wrote {} rows to {}".format(records_written, os.path.basename(destination)))
-
-    pass
-
-
-def main(*args, **kwargs):
-    source = os.path.abspath(kwargs['source'])
-    destination = os.path.abspath(kwargs['save_as'])
-    print()
-    print("Converting {} to {}\n".format(os.path.basename(source), os.path.basename(destination)))
-    tsv2csv(source, destination)
-    print("Done")
-    pass
+    while True:
+        answer = input("{} do you wish to overwrite this? (y/n): ".format(statement))
+        if answer.lower() == "y" or answer.lower() == "yes":
+            return True
+        if answer.lower() == "n" or answer.lower() == "no":
+            return False
+        print("Invalid response", file=sys.stderr)
 
 
 def valid_args(args):
@@ -61,19 +38,7 @@ def valid_args(args):
     return error_msg, warning_msg
     pass
 
-
-def ask_overwrite(statement):
-
-    while True:
-        answer = input("{} do you wish to overwrite this? (y/n): ".format(statement))
-        if answer.lower() == "y" or answer.lower() == "yes":
-            return True
-        if answer.lower() == "n" or answer.lower() == "no":
-            return False
-        print("Invalid response", file=sys.stderr)
-
-
-if __name__ == '__main__':
+def main(*args, **kwargs):
     parser = argparse.ArgumentParser(description="Convert a TSV file to a CSV file")
     parser.add_argument("source", help="source tsv file to be converted into a csv file")
     parser.add_argument("--destination", dest="destination", help="name for a csv file")
@@ -93,8 +58,22 @@ if __name__ == '__main__':
             if not ask_overwrite("{} already exists".format(csv_dest)):
                 print("Okay. Stopping.")
                 exit(0)
-        main(source=args.source, save_as=csv_dest)
+        # main(source=args.source, save_as=csv_dest)
+
     else:
         for error in errors:
             print("Error: {}".format(error), file=sys.stderr)
         exit(1)
+
+    source = os.path.abspath(args.source)
+    destination = os.path.abspath(csv_dest)
+
+    print()
+    print("Converting {} to {}\n".format(os.path.basename(source), os.path.basename(destination)))
+    tsv2csv(source, destination)
+    print("Done")
+
+    pass
+
+if __name__ == '__main__':
+    main()
