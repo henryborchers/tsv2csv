@@ -70,7 +70,7 @@ def main(*args, **kwargs):
 
     print()
     print("Converting {} to {}\n".format(os.path.basename(source), os.path.basename(destination)))
-    tsv2csv(source, destination)
+    tsv2csv.tsv2csv(source, destination)
     print("Done")
 
     pass

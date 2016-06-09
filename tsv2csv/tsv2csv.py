@@ -2,7 +2,6 @@
 import csv
 import os
 
-import sys
 
 def tsv2csv(source, destination):
     records = []
