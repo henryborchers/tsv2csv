@@ -5,10 +5,6 @@ import os
 
 import sys
 
-TSV_SRC = "/Users/hborcher/PycharmProjects/35Sandbox/tsvcsv/csfpal_000047_export.tsv"
-CSV_DST = "/Users/hborcher/PycharmProjects/35Sandbox/tsvcsv/csfpal_000047_export_fromHenry.csv"
-
-
 def tsv2csv(source, destination):
     records = []
     print("Reading rows")
